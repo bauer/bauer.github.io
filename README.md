@@ -1,2 +1,0 @@
-# bauer.github.io
-GitHubPages
