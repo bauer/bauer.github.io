@@ -58,6 +58,49 @@ $ bin/flink run -c io.github.bauer.flink.job.KafkaWrite ./../flink/job/target/jo
 $ bin/flink run -c io.github.bauer.flink.job.KafkaRead ./../flink/job/target/job-0.1.jar --topic KafkaTest
 ~~~
 
+or put it all in a script,  Place this content in a file called start.sh
+~~~bash
+echo "----------------------------------------------------------------"
+echo "Start Zookeeper"
+echo "----------------------------------------------------------------"
+cd kafka_2.11-1.0.0
+./bin/zookeeper-server-start.sh config/zookeeper.properties &
+sleep 5
+
+echo "----------------------------------------------------------------"
+echo "Start Kafka"
+echo "----------------------------------------------------------------"
+./bin/kafka-server-start.sh config/server.properties &
+sleep 5
+
+echo "----------------------------------------------------------------"
+echo "Start Flink"
+echo "----------------------------------------------------------------"
+cd ..
+cd flink-1.3.1
+./bin/start-local.sh &
+sleep 5
+
+echo "----------------------------------------------------------------"
+echo "Execute Flink job: KafkaWrite"
+echo "----------------------------------------------------------------"
+./bin/flink run -c io.github.bauer.flink.job.KafkaWrite ./../../flink/job/target/job-0.1.jar --topic KafkaTest &
+sleep 5
+
+echo "----------------------------------------------------------------"
+echo "Execute Flink job: KafkaRead"
+echo "----------------------------------------------------------------"
+bin/flink run -c io.github.bauer.flink.job.KafkaRead ./../../flink/job/target/job-0.1.jar --topic KafkaTest &
+sleep 5
+
+echo "Done! Open web browser: http://localhost:8081/#/overview"
+ and modify the file to be executable with terminal command: sudo chmod +x
+~~~
+and make it executable with terminal comand: sudo chmod +x
+and then run it with terminal command ./start.sh
+now it will start up everything needed, update the paths to match your environment.
+
+
 and look for the result
 ~~~bash
 # Apache Flink Dashboard for stdout on the taskmanager should show something simular to below output
