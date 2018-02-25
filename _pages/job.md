@@ -49,7 +49,7 @@ $ bin/flink run -c io.github.bauer.flink.job.WordCount <your-path>/flink/job/tar
 Note: If you only have default single availble job slot for Flink, then change config to at least 2 available,
 by editing the file called flink-conf.yaml, change value for taskmanager.numberOfTaskSlots: from 1 to 2.
 
-Start Flink & Kafka first, then start R/W jobs
+Start Zookeeper, Kafka and Flink first, then start R/W jobs with below commands...
 ~~~bash
 # Then execute the Flink job called KafkaWrite to generate some data to Kafka with below
 $ bin/flink run -c io.github.bauer.flink.job.KafkaWrite ./../flink/job/target/job-0.1.jar --topic KafkaTest
@@ -58,7 +58,9 @@ $ bin/flink run -c io.github.bauer.flink.job.KafkaWrite ./../flink/job/target/jo
 $ bin/flink run -c io.github.bauer.flink.job.KafkaRead ./../flink/job/target/job-0.1.jar --topic KafkaTest
 ~~~
 
-or put it all in a script,  Place this content in a file called start.sh
+...or put it all in a script...  
+
+Place this content in a file called start.sh
 ~~~bash
 echo "----------------------------------------------------------------"
 echo "Start Zookeeper"
@@ -94,11 +96,11 @@ bin/flink run -c io.github.bauer.flink.job.KafkaRead ./../../flink/job/target/jo
 sleep 5
 
 echo "Done! Open web browser: http://localhost:8081/#/overview"
- and modify the file to be executable with terminal command: sudo chmod +x
 ~~~
-and make it executable with terminal comand: sudo chmod +x
+...and make it executable with terminal comand: sudo chmod +x
 and then run it with terminal command ./start.sh
-now it will start up everything needed, update the paths to match your environment.
+now it will start up everything needed.
+Note: update the paths to match your environment.
 
 
 and look for the result
